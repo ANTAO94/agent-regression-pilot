@@ -1,3 +1,3 @@
 --require-hashes
-https://github.com/ANTAO94/agent-regression-kit/releases/download/v4.23.0/agent_regression_kit-4.23.0-py3-none-any.whl \
-    --hash=sha256:b011b376a80ac511c6ebeee09729534fb7d4f115bbac8d23c94c9301459293a4
+https://github.com/ANTAO94/agent-regression-kit/releases/download/v4.24.0/agent_regression_kit-4.24.0-py3-none-any.whl \
+    --hash=sha256:d09a867c6cb817b3ba4b7529bc674dffc84b8e3955e998313a9aa18ee1a8fd1b
