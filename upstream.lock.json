@@ -1,9 +1,9 @@
 {
   "consumer_repository": "ANTAO94/agent-regression-pilot",
   "agent_regression_kit": {
-    "version": "4.19.0",
-    "source": "https://github.com/ANTAO94/agent-regression-kit/releases/download/v4.19.0/agent_regression_kit-4.19.0-py3-none-any.whl",
-    "sha256": "c4051e9f77ed370570f55a7408425c6a9177e1988319499c5a00c8b9bfdbba8e"
+    "version": "4.20.0",
+    "source": "https://github.com/ANTAO94/agent-regression-kit/releases/download/v4.20.0/agent_regression_kit-4.20.0-py3-none-any.whl",
+    "sha256": "653e7b8f2aae0ed69fd5db6096e77291b7353bb945693148771d57fbe6658436"
   },
   "consumer_commit": "15cea6c",
   "scope": "released-wheel-and-public-api-only"
