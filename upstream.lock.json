@@ -5,6 +5,6 @@
     "source": "https://github.com/ANTAO94/agent-regression-kit/releases/download/v4.26.0/agent_regression_kit-4.26.0-py3-none-any.whl",
     "sha256": "97ba634bc39a7c5118be68173e7bfe3827be3dd27c795a77620be0d780fa8724"
   },
-  "consumer_commit": "pending-v4.26-upgrade",
+  "consumer_commit": "56a1316",
   "scope": "released-wheel-and-public-api-only"
 }
