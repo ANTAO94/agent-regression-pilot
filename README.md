@@ -1,7 +1,7 @@
 # Agent Regression Pilot
 
 This is an independent consumer repository for [Agent Regression Kit](https://github.com/ANTAO94/agent-regression-kit).
-It owns a small two-tool order Agent and consumes only the published v4.29.0
+It owns a small two-tool order Agent and consumes only the published v4.30.0
 wheel. It does not import the kit source tree, use `PYTHONPATH` to the producer
 repository, or copy its implementation.
 
@@ -65,3 +65,8 @@ Contract, comparison and exit-code boundaries still catch three application
 regressions. It does not claim that this one Agent represents every framework
 or production workload; the v4.28 and earlier checks remain available in the
 repository history as earlier release-boundary records.
+
+The v4.30 upgrade additionally imports the public `sha256_file` helper from the
+released wheel and hashes the reviewed baseline. The consumer still validates
+the application-facing record/Contract/compare boundary rather than importing
+the producer checkout.

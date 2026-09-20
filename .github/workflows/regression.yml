@@ -15,6 +15,12 @@ jobs:
           python-version: "3.11"
       - name: Install released Agent Regression Kit
         run: python -m pip install --require-hashes -r requirements-ci.txt
+      - name: Verify v4.30 public evidence helper
+        run: >-
+          python -c
+          'from agent_regression import __version__, sha256_file;
+          assert __version__ == "4.30.0";
+          print(__version__, sha256_file("baselines/order-status.trace.json"))'
       - name: Record the normal Agent run
         run: PYTHONPATH=. python scripts/record_agent.py --variant normal --out work/candidate.trace.json
       - name: Validate the evidence boundary
