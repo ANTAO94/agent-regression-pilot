@@ -1,0 +1,57 @@
+name: Consumer Agent regression
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install released Agent Regression Kit
+        run: python -m pip install --require-hashes -r requirements-ci.txt
+      - name: Record the normal Agent run
+        run: PYTHONPATH=. python scripts/record_agent.py --variant normal --out work/candidate.trace.json
+      - name: Validate the evidence boundary
+        run: agent-regression check --config contracts/order-status.json
+      - name: Compare the normal run
+        run: agent-regression compare --config contracts/order-status.json
+      - name: Inject wrong resource regression and require a block
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=. python scripts/record_agent.py --variant wrong-resource --out work/wrong-resource.trace.json
+          cp work/wrong-resource.trace.json work/candidate.trace.json
+          agent-regression compare --config contracts/order-status.json --out work/reports/wrong-resource.json
+          status=$?
+          test "$status" -eq 1
+      - name: Inject skipped-tool regression and require a block
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=. python scripts/record_agent.py --variant skip-tool --out work/skip-tool.trace.json
+          cp work/skip-tool.trace.json work/candidate.trace.json
+          agent-regression compare --config contracts/order-status.json --out work/reports/skip-tool.json
+          status=$?
+          test "$status" -eq 1
+      - name: Inject result-misread regression and require a block
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=. python scripts/record_agent.py --variant misread-result --out work/misread-result.trace.json
+          cp work/misread-result.trace.json work/candidate.trace.json
+          agent-regression compare --config contracts/order-status.json --out work/reports/misread-result.json
+          status=$?
+          test "$status" -eq 1
+      - name: Upload comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: consumer-agent-regression-reports
+          path: work/reports/
+          if-no-files-found: error

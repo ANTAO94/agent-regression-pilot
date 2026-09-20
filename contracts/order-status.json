@@ -1,0 +1,42 @@
+{
+  "baseline": "../baselines/order-status.trace.json",
+  "candidate": "../work/candidate.trace.json",
+  "report": "../work/reports/compare.json",
+  "final_answer_mode": "claims-only",
+  "contract": {
+    "required_claims": [
+      "final_answer.claims.order_status",
+      "final_answer.claims.balance_verified"
+    ],
+    "assertions": [
+      {
+        "path": "final_answer.claims.order_status",
+        "equals": "not_shipped"
+      },
+      {
+        "path": "final_answer.claims.balance_verified",
+        "equals": true
+      }
+    ],
+    "must_call": [
+      {
+        "tool": "get_order",
+        "arguments": {"order_id": "123"}
+      },
+      {
+        "tool": "get_balance",
+        "arguments": {"customer_id": "customer-1"}
+      }
+    ],
+    "must_not_call": ["refund_order"],
+    "relations": [
+      {
+        "left": "tool_calls[1].arguments.customer_id",
+        "operator": "equals_path",
+        "right_path": "tool_results[0].result.customer_id",
+        "message": "the balance lookup must use the customer returned by get_order"
+      }
+    ],
+    "max_steps": 2
+  }
+}
