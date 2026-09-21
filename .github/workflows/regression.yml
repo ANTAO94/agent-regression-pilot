@@ -15,19 +15,24 @@ jobs:
           python-version: "3.11"
       - name: Install released Agent Regression Kit
         run: python -m pip install --require-hashes -r requirements-ci.txt
-      - name: Verify v4.33 public evidence helper
+      - name: Verify v4.34 public evidence helper
         run: >-
           python -c
           'from agent_regression import __version__, sha256_file;
-          assert __version__ == "4.33.0";
+          assert __version__ == "4.34.0";
           print(__version__, sha256_file("baselines/order-status.trace.json"))'
-      - name: Verify v4.33 evidence bindings with an independent consumer bundle
+      - name: Verify v4.34 evidence bindings with an independent consumer bundle
         run: |
           PYTHONPATH=. python scripts/create_study.py --out-dir work/consumer-study
           agent-regression study \
             --manifest work/consumer-study/study.json \
             --format json \
-            --out work/reports/consumer-study.json
+            --out work/reports/consumer-study.json \
+            --checksum-out work/reports/consumer-study.json.sha256
+      - name: Verify the published report sidecar
+        run: |
+          shasum -a 256 work/reports/consumer-study.json
+          test "$(awk '{print $1}' work/reports/consumer-study.json.sha256)" = "$(shasum -a 256 work/reports/consumer-study.json | awk '{print $1}')"
       - name: Record the normal Agent run
         run: PYTHONPATH=. python scripts/record_agent.py --variant normal --out work/candidate.trace.json
       - name: Validate the evidence boundary

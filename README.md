@@ -1,7 +1,7 @@
 # Agent Regression Pilot
 
 This is an independent consumer repository for [Agent Regression Kit](https://github.com/ANTAO94/agent-regression-kit).
-It owns a small two-tool order Agent and consumes only the published v4.33.0
+It owns a small two-tool order Agent and consumes only the published v4.34.0
 wheel. It does not import the kit source tree, use `PYTHONPATH` to the producer
 repository, or copy its implementation.
 
@@ -71,7 +71,8 @@ released wheel and hashed the reviewed baseline. The v4.33 upgrade repeats that
 release-boundary check and builds an independent sampling-study manifest with
 five required evidence roles (`input`, `tool_schema`, `adapter`,
 `provider_output`, `dataset`) and six bindings, including provider, model and
-dataset revision identity. The published wheel verifies the bundle and records
-only file paths, binding IDs and SHA-256 digests; it does not read descriptor
-contents into the report. The consumer still validates the application-facing
-record/Contract/compare boundary rather than importing the producer checkout.
+dataset revision identity. The published wheel verifies the bundle, writes a
+SHA-256 sidecar for the final study report and records only file paths, binding
+IDs and SHA-256 digests; it does not read descriptor contents into the report.
+The consumer still validates the application-facing record/Contract/compare
+boundary rather than importing the producer checkout.
