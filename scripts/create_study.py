@@ -1,4 +1,4 @@
-"""Create a small v4.33 sampling-study bundle from the consumer baseline."""
+"""Create a small sampling-study bundle from the consumer baseline."""
 
 from __future__ import annotations
 

@@ -1,7 +1,7 @@
 # Agent Regression Pilot
 
 This is an independent consumer repository for [Agent Regression Kit](https://github.com/ANTAO94/agent-regression-kit).
-It owns a small two-tool order Agent and consumes only the published v4.34.0
+It owns a small two-tool order Agent and consumes only the published v4.35.0
 wheel. It does not import the kit source tree, use `PYTHONPATH` to the producer
 repository, or copy its implementation.
 
@@ -76,3 +76,9 @@ SHA-256 sidecar for the final study report and records only file paths, binding
 IDs and SHA-256 digests; it does not read descriptor contents into the report.
 The consumer still validates the application-facing record/Contract/compare
 boundary rather than importing the producer checkout.
+
+The v4.35 workflow also invokes the released `readiness` CLI with a consumer-
+generated manifest. It expects exit code 1 because the independent-user check
+is intentionally `pending`; the workflow asserts that the report remains
+`ready=false`. This proves the published package exposes the final-readiness
+boundary without fabricating external evidence.
