@@ -1,0 +1,69 @@
+{
+  "schema_version": "0.1",
+  "run_id": "consumer-matrix-orders-cancelled-789",
+  "agent": {
+    "name": "independent-order-matrix-agent",
+    "version": "0.2.0",
+    "framework": "consumer-fixture"
+  },
+  "events": [
+    {
+      "type": "tool_call",
+      "call_id": "call-1",
+      "tool": "get_order",
+      "arguments": {
+        "order_id": "789"
+      },
+      "sequence": 1
+    },
+    {
+      "type": "tool_result",
+      "call_id": "call-1",
+      "result": {
+        "order_id": "789",
+        "customer_id": "customer-3",
+        "status": "cancelled"
+      },
+      "is_error": false,
+      "sequence": 2
+    },
+    {
+      "type": "tool_call",
+      "call_id": "call-2",
+      "tool": "get_balance",
+      "arguments": {
+        "customer_id": "customer-3"
+      },
+      "sequence": 3
+    },
+    {
+      "type": "tool_result",
+      "call_id": "call-2",
+      "result": {
+        "customer_id": "customer-3",
+        "balance": 50
+      },
+      "is_error": false,
+      "sequence": 4
+    },
+    {
+      "type": "final_answer",
+      "text": "Audit result for order 789 is cancelled; balance checked: True.",
+      "claims": {
+        "order_status": "cancelled",
+        "balance_verified": true
+      },
+      "sequence": 5
+    }
+  ],
+  "metadata": {
+    "input": {
+      "case_id": "orders/cancelled-789",
+      "order_id": "789",
+      "style": "audit"
+    },
+    "consumer_repo": "agent-regression-pilot",
+    "matrix_case": "orders/cancelled-789",
+    "mutation": "none"
+  }
+}

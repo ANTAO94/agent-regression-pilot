@@ -1,0 +1,12 @@
+[
+  {"id": "orders/not-shipped-123", "order_id": "123", "style": "default", "expected": {"order_status": "not_shipped", "balance_verified": true}},
+  {"id": "orders/shipped-456", "order_id": "456", "style": "customer", "expected": {"order_status": "shipped", "balance_verified": true}},
+  {"id": "orders/cancelled-789", "order_id": "789", "style": "audit", "expected": {"order_status": "cancelled", "balance_verified": true}},
+  {"id": "orders/pending-888", "order_id": "888", "style": "default", "expected": {"order_status": "pending", "balance_verified": false}},
+  {"id": "orders/missing-999", "order_id": "999", "style": "customer", "expected": {"order_status": "not_found", "balance_verified": false}},
+  {"id": "orders/not-shipped-123-customer", "order_id": "123", "style": "customer", "expected": {"order_status": "not_shipped", "balance_verified": true}},
+  {"id": "orders/shipped-456-audit", "order_id": "456", "style": "audit", "expected": {"order_status": "shipped", "balance_verified": true}},
+  {"id": "orders/cancelled-789-customer", "order_id": "789", "style": "customer", "expected": {"order_status": "cancelled", "balance_verified": true}},
+  {"id": "orders/pending-888-audit", "order_id": "888", "style": "audit", "expected": {"order_status": "pending", "balance_verified": false}},
+  {"id": "orders/not-shipped-123-audit", "order_id": "123", "style": "audit", "expected": {"order_status": "not_shipped", "balance_verified": true}}
+]

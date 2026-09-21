@@ -1,0 +1,343 @@
+{
+  "baseline_dir": "../baselines/matrix",
+  "candidate_dir": "../work/matrix-candidate",
+  "report": "../work/reports/matrix.json",
+  "format": "json",
+  "final_answer_mode": "claims-only",
+  "case_contracts": {
+    "orders/not-shipped-123.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "not_shipped"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "123"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-1"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/shipped-456.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "shipped"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "456"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-2"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/cancelled-789.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "cancelled"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "789"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-3"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/pending-888.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "pending"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": false
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "888"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "missing-customer"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/missing-999.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "not_found"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": false
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "999"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 1
+    },
+    "orders/not-shipped-123-customer.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "not_shipped"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "123"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-1"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/shipped-456-audit.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "shipped"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "456"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-2"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/cancelled-789-customer.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "cancelled"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "789"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-3"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/pending-888-audit.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "pending"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": false
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "888"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "missing-customer"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    },
+    "orders/not-shipped-123-audit.trace.json": {
+      "required_claims": [
+        "final_answer.claims.order_status",
+        "final_answer.claims.balance_verified"
+      ],
+      "assertions": [
+        {
+          "path": "final_answer.claims.order_status",
+          "equals": "not_shipped"
+        },
+        {
+          "path": "final_answer.claims.balance_verified",
+          "equals": true
+        }
+      ],
+      "must_call": [
+        {
+          "tool": "get_order",
+          "arguments": {
+            "order_id": "123"
+          }
+        },
+        {
+          "tool": "get_balance",
+          "arguments": {
+            "customer_id": "customer-1"
+          }
+        }
+      ],
+      "must_not_call": [
+        "refund_order"
+      ],
+      "max_steps": 2
+    }
+  }
+}

@@ -15,13 +15,13 @@ jobs:
           python-version: "3.11"
       - name: Install released Agent Regression Kit
         run: python -m pip install --require-hashes -r requirements-ci.txt
-      - name: Verify v4.36.1 public evidence and readiness API
+      - name: Verify v4.37.0 public evidence and readiness API
         run: >-
           python -c
           'from agent_regression import __version__, sha256_file;
-          assert __version__ == "4.36.1";
+          assert __version__ == "4.37.0";
           print(__version__, sha256_file("baselines/order-status.trace.json"))'
-      - name: Verify v4.36.1 evidence bindings with an independent consumer bundle
+      - name: Verify evidence bindings with an independent consumer bundle
         run: |
           PYTHONPATH=. python scripts/create_study.py --out-dir work/consumer-study
           agent-regression study \
@@ -51,6 +51,51 @@ jobs:
         run: agent-regression check --config contracts/order-status.json
       - name: Compare the normal run
         run: agent-regression compare --config contracts/order-status.json
+      - name: Record and compare the ten-case business matrix
+        run: |
+          PYTHONPATH=. python scripts/run_matrix.py --out-dir work/matrix-candidate
+          agent-regression config validate --config matrix/compare.config.json --kind batch
+          agent-regression check --config matrix/compare.config.json --kind batch
+          agent-regression batch-compare --config matrix/compare.config.json
+      - name: Block injected regressions in the ten-case matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          expect_matrix_regression() {
+            local mutation="$1"
+            local case_id="$2"
+            local expected_category="$3"
+            rm -rf work/matrix-candidate
+            PYTHONPATH=. python scripts/run_matrix.py \
+              --out-dir work/matrix-candidate \
+              --mutation "$mutation" \
+              --mutation-case "$case_id"
+            set +e
+            agent-regression batch-compare \
+              --config matrix/compare.config.json \
+              --out "work/reports/matrix-${mutation}.json"
+            status=$?
+            set -e
+            test "$status" -eq 1
+            python - "work/reports/matrix-${mutation}.json" "$expected_category" <<'PY'
+          import json
+          import sys
+
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          expected = sys.argv[2]
+          categories = {
+              difference["category"]
+              for case in report["cases"]
+              for difference in case.get("differences", [])
+              if not difference["allowed"]
+          }
+          assert expected in categories, (expected, sorted(categories))
+          PY
+          }
+
+          expect_matrix_regression wrong-resource orders/shipped-456 required_tool
+          expect_matrix_regression skip-tool orders/shipped-456 required_tool
+          expect_matrix_regression misread-result orders/not-shipped-123 contract_assertion
       - name: Inject wrong resource regression and require a block
         shell: bash
         run: |
@@ -83,5 +128,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: consumer-agent-regression-reports
-          path: work/reports/
+          path: |
+            work/reports/
+            work/matrix-candidate/
           if-no-files-found: error

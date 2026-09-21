@@ -4,3 +4,4 @@ __pycache__/
 work/*.trace.json
 work/reports/
 work/consumer-study*/
+work/matrix-candidate*/

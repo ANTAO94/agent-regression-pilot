@@ -1,0 +1,69 @@
+{
+  "schema_version": "0.1",
+  "run_id": "consumer-matrix-orders-shipped-456",
+  "agent": {
+    "name": "independent-order-matrix-agent",
+    "version": "0.2.0",
+    "framework": "consumer-fixture"
+  },
+  "events": [
+    {
+      "type": "tool_call",
+      "call_id": "call-1",
+      "tool": "get_order",
+      "arguments": {
+        "order_id": "456"
+      },
+      "sequence": 1
+    },
+    {
+      "type": "tool_result",
+      "call_id": "call-1",
+      "result": {
+        "order_id": "456",
+        "customer_id": "customer-2",
+        "status": "shipped"
+      },
+      "is_error": false,
+      "sequence": 2
+    },
+    {
+      "type": "tool_call",
+      "call_id": "call-2",
+      "tool": "get_balance",
+      "arguments": {
+        "customer_id": "customer-2"
+      },
+      "sequence": 3
+    },
+    {
+      "type": "tool_result",
+      "call_id": "call-2",
+      "result": {
+        "customer_id": "customer-2",
+        "balance": 0
+      },
+      "is_error": false,
+      "sequence": 4
+    },
+    {
+      "type": "final_answer",
+      "text": "Customer order 456 is shipped; balance checked: True.",
+      "claims": {
+        "order_status": "shipped",
+        "balance_verified": true
+      },
+      "sequence": 5
+    }
+  ],
+  "metadata": {
+    "input": {
+      "case_id": "orders/shipped-456",
+      "order_id": "456",
+      "style": "customer"
+    },
+    "consumer_repo": "agent-regression-pilot",
+    "matrix_case": "orders/shipped-456",
+    "mutation": "none"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.1",
+  "run_id": "consumer-matrix-orders-missing-999",
+  "agent": {
+    "name": "independent-order-matrix-agent",
+    "version": "0.2.0",
+    "framework": "consumer-fixture"
+  },
+  "events": [
+    {
+      "type": "tool_call",
+      "call_id": "call-1",
+      "tool": "get_order",
+      "arguments": {
+        "order_id": "999"
+      },
+      "sequence": 1
+    },
+    {
+      "type": "tool_result",
+      "call_id": "call-1",
+      "result": {
+        "error": "order not found"
+      },
+      "is_error": true,
+      "error": "order not found",
+      "sequence": 2
+    },
+    {
+      "type": "final_answer",
+      "text": "Order 999 was not found.",
+      "claims": {
+        "order_status": "not_found",
+        "balance_verified": false
+      },
+      "sequence": 3
+    }
+  ],
+  "metadata": {
+    "input": {
+      "case_id": "orders/missing-999",
+      "order_id": "999",
+      "style": "customer"
+    },
+    "consumer_repo": "agent-regression-pilot",
+    "matrix_case": "orders/missing-999",
+    "mutation": "none"
+  }
+}

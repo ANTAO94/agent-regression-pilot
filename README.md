@@ -1,7 +1,7 @@
 # Agent Regression Pilot
 
 This is an independent consumer repository for [Agent Regression Kit](https://github.com/ANTAO94/agent-regression-kit).
-It owns a small two-tool order Agent and consumes only the published v4.36.1
+It owns a small two-tool order Agent and consumes only the published v4.37.0
 wheel. It does not import the kit source tree, use `PYTHONPATH` to the producer
 repository, or copy its implementation.
 
@@ -88,3 +88,11 @@ reruns the same consumer-owned recording, Contract, comparison, study and
 readiness checks. It proves release compatibility for this independent Agent;
 the separate LangGraph feature pilot remains in the producer repository and is
 not claimed as a capability of this order Agent.
+
+The v4.37.0 consumer check adds a ten-case business matrix. Cases cover
+different order outcomes, a missing order, a missing balance, and harmless
+presentation changes. `matrix/compare.config.json` uses the kit's
+`case_contracts` feature so every Trace has its own reviewed expected claims
+and required tool path. CI runs the normal matrix and injects wrong-resource,
+skipped-tool and result-misread regressions into selected cases; each must
+return exit code `1` with the expected blocking category.
