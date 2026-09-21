@@ -1,4 +1,4 @@
-"""Create a small v4.32 sampling-study bundle from the consumer baseline."""
+"""Create a small v4.33 sampling-study bundle from the consumer baseline."""
 
 from __future__ import annotations
 
@@ -41,10 +41,16 @@ def main() -> int:
         "input": output / "evidence/input.json",
         "tool_schema": output / "evidence/tool-schema.json",
         "adapter": output / "evidence/adapter.json",
+        "provider_output": output / "evidence/provider.json",
+        "model_output": output / "evidence/model.json",
+        "dataset": output / "evidence/dataset.json",
     }
     write_json(evidence_files["input"], {"input_sha256": input_sha256})
     write_json(evidence_files["tool_schema"], {"tool_schema_sha256": tool_schema_sha256})
     write_json(evidence_files["adapter"], {"adapter": "consumer-fixture", "version": "0.1.0"})
+    write_json(evidence_files["provider_output"], {"provider": "consumer-fixture"})
+    write_json(evidence_files["model_output"], {"model": "independent-order-agent-v0.1"})
+    write_json(evidence_files["dataset"], {"dataset_revision": "consumer-fixture-v1"})
 
     contract = json.loads((ROOT / "contracts/order-status.json").read_text(encoding="utf-8"))["contract"]
     comparison_policy = {"final_answer_mode": "claims-only", "contract": contract}
@@ -79,7 +85,7 @@ def main() -> int:
         "evidence": [
             {
                 "id": f"{role}-evidence",
-                "role": role,
+                "role": "provider_output" if role == "model_output" else role,
                 "path": str(path.relative_to(output)),
                 "sha256": sha256_file(path),
             }
@@ -101,15 +107,39 @@ def main() -> int:
                 "target": "provenance.adapter",
                 "field": "adapter",
             },
+            {
+                "evidence_id": "provider_output-evidence",
+                "target": "provenance.provider",
+                "field": "provider",
+            },
+            {
+                "evidence_id": "model_output-evidence",
+                "target": "provenance.model",
+                "field": "model",
+            },
+            {
+                "evidence_id": "dataset-evidence",
+                "target": "provenance.dataset_revision",
+                "field": "dataset_revision",
+            },
         ],
         "integrity": {
             "require_trace_hashes": True,
             "require_evidence_index": True,
-            "required_evidence_roles": ["adapter", "input", "tool_schema"],
+            "required_evidence_roles": [
+                "adapter",
+                "dataset",
+                "input",
+                "provider_output",
+                "tool_schema",
+            ],
             "require_evidence_bindings": True,
             "required_evidence_bindings": [
                 "provenance.adapter",
+                "provenance.dataset_revision",
                 "provenance.input_sha256",
+                "provenance.model",
+                "provenance.provider",
                 "provenance.tool_schema_sha256",
             ],
             "baseline_sha256": sha256_file(baseline),
