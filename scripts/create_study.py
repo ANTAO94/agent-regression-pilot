@@ -1,4 +1,4 @@
-"""Create a small v4.31 sampling-study bundle from the consumer baseline."""
+"""Create a small v4.32 sampling-study bundle from the consumer baseline."""
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def main() -> int:
     }
     write_json(evidence_files["input"], {"input_sha256": input_sha256})
     write_json(evidence_files["tool_schema"], {"tool_schema_sha256": tool_schema_sha256})
-    write_json(evidence_files["adapter"], {"name": "independent-order-agent", "version": "0.1.0"})
+    write_json(evidence_files["adapter"], {"adapter": "consumer-fixture", "version": "0.1.0"})
 
     contract = json.loads((ROOT / "contracts/order-status.json").read_text(encoding="utf-8"))["contract"]
     comparison_policy = {"final_answer_mode": "claims-only", "contract": contract}
@@ -85,10 +85,33 @@ def main() -> int:
             }
             for role, path in evidence_files.items()
         ],
+        "evidence_bindings": [
+            {
+                "evidence_id": "input-evidence",
+                "target": "provenance.input_sha256",
+                "field": "input_sha256",
+            },
+            {
+                "evidence_id": "tool_schema-evidence",
+                "target": "provenance.tool_schema_sha256",
+                "field": "tool_schema_sha256",
+            },
+            {
+                "evidence_id": "adapter-evidence",
+                "target": "provenance.adapter",
+                "field": "adapter",
+            },
+        ],
         "integrity": {
             "require_trace_hashes": True,
             "require_evidence_index": True,
             "required_evidence_roles": ["adapter", "input", "tool_schema"],
+            "require_evidence_bindings": True,
+            "required_evidence_bindings": [
+                "provenance.adapter",
+                "provenance.input_sha256",
+                "provenance.tool_schema_sha256",
+            ],
             "baseline_sha256": sha256_file(baseline),
             "comparison_policy_sha256": canonical_sha256(normalized_policy.to_dict()),
         },

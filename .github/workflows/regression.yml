@@ -15,13 +15,13 @@ jobs:
           python-version: "3.11"
       - name: Install released Agent Regression Kit
         run: python -m pip install --require-hashes -r requirements-ci.txt
-      - name: Verify v4.31 public evidence helper
+      - name: Verify v4.32 public evidence helper
         run: >-
           python -c
           'from agent_regression import __version__, sha256_file;
-          assert __version__ == "4.31.0";
+          assert __version__ == "4.32.0";
           print(__version__, sha256_file("baselines/order-status.trace.json"))'
-      - name: Verify v4.31 evidence index with an independent consumer bundle
+      - name: Verify v4.32 evidence bindings with an independent consumer bundle
         run: |
           PYTHONPATH=. python scripts/create_study.py --out-dir work/consumer-study
           agent-regression study \
