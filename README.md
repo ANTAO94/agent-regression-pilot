@@ -1,7 +1,7 @@
 # Agent Regression Pilot
 
 This is an independent consumer repository for [Agent Regression Kit](https://github.com/ANTAO94/agent-regression-kit).
-It owns a small two-tool order Agent and consumes only the published v4.35.0
+It owns a small two-tool order Agent and consumes only the published v4.36.1
 wheel. It does not import the kit source tree, use `PYTHONPATH` to the producer
 repository, or copy its implementation.
 
@@ -82,3 +82,9 @@ generated manifest. It expects exit code 1 because the independent-user check
 is intentionally `pending`; the workflow asserts that the report remains
 `ready=false`. This proves the published package exposes the final-readiness
 boundary without fabricating external evidence.
+
+The v4.36.1 upgrade installs the tagged release wheel by URL and SHA-256, then
+reruns the same consumer-owned recording, Contract, comparison, study and
+readiness checks. It proves release compatibility for this independent Agent;
+the separate LangGraph feature pilot remains in the producer repository and is
+not claimed as a capability of this order Agent.
